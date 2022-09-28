@@ -1,0 +1,15 @@
+syntax = "proto3";
+package tmsdkeys.leaders.leaders;
+
+import "gogoproto/gogo.proto";
+import "leaders/params.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/tmsdkeys/leaders/x/leaders/types";
+
+// GenesisState defines the leaders module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  string port_id = 2;
+  // this line is used by starport scaffolding # genesis/proto/state
+}

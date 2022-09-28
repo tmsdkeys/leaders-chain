@@ -1,0 +1,12 @@
+syntax = "proto3";
+package tmsdkeys.leaders.leaders;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/tmsdkeys/leaders/x/leaders/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+}
