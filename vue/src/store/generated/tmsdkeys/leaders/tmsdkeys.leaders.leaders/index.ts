@@ -3,9 +3,10 @@ import { txClient, queryClient, MissingWalletError , registry} from './module'
 import { LeadersPacketData } from "./module/types/leaders/packet"
 import { NoData } from "./module/types/leaders/packet"
 import { Params } from "./module/types/leaders/params"
+import { TopRanked } from "./module/types/leaders/top_ranked"
 
 
-export { LeadersPacketData, NoData, Params };
+export { LeadersPacketData, NoData, Params, TopRanked };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -44,11 +45,13 @@ function getStructure(template) {
 const getDefaultState = () => {
 	return {
 				Params: {},
+				TopRanked: {},
 				
 				_Structure: {
 						LeadersPacketData: getStructure(LeadersPacketData.fromPartial({})),
 						NoData: getStructure(NoData.fromPartial({})),
 						Params: getStructure(Params.fromPartial({})),
+						TopRanked: getStructure(TopRanked.fromPartial({})),
 						
 		},
 		_Registry: registry,
@@ -82,6 +85,12 @@ export default {
 						(<any> params).query=null
 					}
 			return state.Params[JSON.stringify(params)] ?? {}
+		},
+				getTopRanked: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.TopRanked[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -134,6 +143,28 @@ export default {
 				return getters['getParams']( { params: {...key}, query}) ?? {}
 			} catch (e) {
 				throw new Error('QueryClient:QueryParams API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		
+		
+		 		
+		
+		
+		async QueryTopRanked({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryTopRanked()).data
+				
+					
+				commit('QUERY', { query: 'TopRanked', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryTopRanked', payload: { options: { all }, params: {...key},query }})
+				return getters['getTopRanked']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryTopRanked API Node Unavailable. Could not perform query: ' + e.message)
 				
 			}
 		},

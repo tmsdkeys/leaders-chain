@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { Params } from "../leaders/params";
+import { TopRanked } from "../leaders/top_ranked";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "tmsdkeys.leaders.leaders";
@@ -7,8 +8,9 @@ export const protobufPackage = "tmsdkeys.leaders.leaders";
 /** GenesisState defines the leaders module's genesis state. */
 export interface GenesisState {
   params: Params | undefined;
-  /** this line is used by starport scaffolding # genesis/proto/state */
   port_id: string;
+  /** this line is used by starport scaffolding # genesis/proto/state */
+  topRanked: TopRanked | undefined;
 }
 
 const baseGenesisState: object = { port_id: "" };
@@ -20,6 +22,9 @@ export const GenesisState = {
     }
     if (message.port_id !== "") {
       writer.uint32(18).string(message.port_id);
+    }
+    if (message.topRanked !== undefined) {
+      TopRanked.encode(message.topRanked, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -36,6 +41,9 @@ export const GenesisState = {
           break;
         case 2:
           message.port_id = reader.string();
+          break;
+        case 3:
+          message.topRanked = TopRanked.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -57,6 +65,11 @@ export const GenesisState = {
     } else {
       message.port_id = "";
     }
+    if (object.topRanked !== undefined && object.topRanked !== null) {
+      message.topRanked = TopRanked.fromJSON(object.topRanked);
+    } else {
+      message.topRanked = undefined;
+    }
     return message;
   },
 
@@ -65,6 +78,10 @@ export const GenesisState = {
     message.params !== undefined &&
       (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     message.port_id !== undefined && (obj.port_id = message.port_id);
+    message.topRanked !== undefined &&
+      (obj.topRanked = message.topRanked
+        ? TopRanked.toJSON(message.topRanked)
+        : undefined);
     return obj;
   },
 
@@ -79,6 +96,11 @@ export const GenesisState = {
       message.port_id = object.port_id;
     } else {
       message.port_id = "";
+    }
+    if (object.topRanked !== undefined && object.topRanked !== null) {
+      message.topRanked = TopRanked.fromPartial(object.topRanked);
+    } else {
+      message.topRanked = undefined;
     }
     return message;
   },

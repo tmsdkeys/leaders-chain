@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Reader, Writer } from "protobufjs/minimal";
 import { Params } from "../leaders/params";
+import { TopRanked } from "../leaders/top_ranked";
 
 export const protobufPackage = "tmsdkeys.leaders.leaders";
 
@@ -11,6 +12,12 @@ export interface QueryParamsRequest {}
 export interface QueryParamsResponse {
   /** params holds all the parameters of this module. */
   params: Params | undefined;
+}
+
+export interface QueryGetTopRankedRequest {}
+
+export interface QueryGetTopRankedResponse {
+  TopRanked: TopRanked | undefined;
 }
 
 const baseQueryParamsRequest: object = {};
@@ -110,10 +117,138 @@ export const QueryParamsResponse = {
   },
 };
 
+const baseQueryGetTopRankedRequest: object = {};
+
+export const QueryGetTopRankedRequest = {
+  encode(
+    _: QueryGetTopRankedRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetTopRankedRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetTopRankedRequest,
+    } as QueryGetTopRankedRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): QueryGetTopRankedRequest {
+    const message = {
+      ...baseQueryGetTopRankedRequest,
+    } as QueryGetTopRankedRequest;
+    return message;
+  },
+
+  toJSON(_: QueryGetTopRankedRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(
+    _: DeepPartial<QueryGetTopRankedRequest>
+  ): QueryGetTopRankedRequest {
+    const message = {
+      ...baseQueryGetTopRankedRequest,
+    } as QueryGetTopRankedRequest;
+    return message;
+  },
+};
+
+const baseQueryGetTopRankedResponse: object = {};
+
+export const QueryGetTopRankedResponse = {
+  encode(
+    message: QueryGetTopRankedResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.TopRanked !== undefined) {
+      TopRanked.encode(message.TopRanked, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetTopRankedResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetTopRankedResponse,
+    } as QueryGetTopRankedResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.TopRanked = TopRanked.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetTopRankedResponse {
+    const message = {
+      ...baseQueryGetTopRankedResponse,
+    } as QueryGetTopRankedResponse;
+    if (object.TopRanked !== undefined && object.TopRanked !== null) {
+      message.TopRanked = TopRanked.fromJSON(object.TopRanked);
+    } else {
+      message.TopRanked = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetTopRankedResponse): unknown {
+    const obj: any = {};
+    message.TopRanked !== undefined &&
+      (obj.TopRanked = message.TopRanked
+        ? TopRanked.toJSON(message.TopRanked)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetTopRankedResponse>
+  ): QueryGetTopRankedResponse {
+    const message = {
+      ...baseQueryGetTopRankedResponse,
+    } as QueryGetTopRankedResponse;
+    if (object.TopRanked !== undefined && object.TopRanked !== null) {
+      message.TopRanked = TopRanked.fromPartial(object.TopRanked);
+    } else {
+      message.TopRanked = undefined;
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
+  /** Queries a TopRanked by index. */
+  TopRanked(
+    request: QueryGetTopRankedRequest
+  ): Promise<QueryGetTopRankedResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -129,6 +264,20 @@ export class QueryClientImpl implements Query {
       data
     );
     return promise.then((data) => QueryParamsResponse.decode(new Reader(data)));
+  }
+
+  TopRanked(
+    request: QueryGetTopRankedRequest
+  ): Promise<QueryGetTopRankedResponse> {
+    const data = QueryGetTopRankedRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "tmsdkeys.leaders.leaders.Query",
+      "TopRanked",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetTopRankedResponse.decode(new Reader(data))
+    );
   }
 }
 

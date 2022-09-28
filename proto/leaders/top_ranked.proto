@@ -1,0 +1,11 @@
+syntax = "proto3";
+package tmsdkeys.leaders.leaders;
+
+option go_package = "github.com/tmsdkeys/leaders/x/leaders/types";
+
+message TopRanked {
+  string clientId = 1; 
+  string address = 2; 
+  string score = 3; 
+  
+}

@@ -14,12 +14,22 @@
  */
 export type LeadersParams = object;
 
+export interface LeadersQueryGetTopRankedResponse {
+  TopRanked?: LeadersTopRanked;
+}
+
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
 export interface LeadersQueryParamsResponse {
   /** params holds all the parameters of this module. */
   params?: LeadersParams;
+}
+
+export interface LeadersTopRanked {
+  clientId?: string;
+  address?: string;
+  score?: string;
 }
 
 export interface ProtobufAny {
@@ -240,6 +250,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<LeadersQueryParamsResponse, RpcStatus>({
       path: `/tmsdkeys/leaders/leaders/params`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryTopRanked
+   * @summary Queries a TopRanked by index.
+   * @request GET:/tmsdkeys/leaders/leaders/top_ranked
+   */
+  queryTopRanked = (params: RequestParams = {}) =>
+    this.request<LeadersQueryGetTopRankedResponse, RpcStatus>({
+      path: `/tmsdkeys/leaders/leaders/top_ranked`,
       method: "GET",
       format: "json",
       ...params,
