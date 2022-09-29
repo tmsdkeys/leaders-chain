@@ -51966,6 +51966,8 @@ definitions:
     title: >-
       SignatureCounts contains information about signature reporting for a
       number of blocks
+  tmsdkeys.leaders.leaders.MsgSendTopRankResponse:
+    type: object
   tmsdkeys.leaders.leaders.Params:
     type: object
     description: Params defines the parameters for the module.

@@ -25,6 +25,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type LeadersPacketData struct {
 	// Types that are valid to be assigned to Packet:
 	//	*LeadersPacketData_NoData
+	//	*LeadersPacketData_TopRankPacket
 	Packet isLeadersPacketData_Packet `protobuf_oneof:"packet"`
 }
 
@@ -70,8 +71,12 @@ type isLeadersPacketData_Packet interface {
 type LeadersPacketData_NoData struct {
 	NoData *NoData `protobuf:"bytes,1,opt,name=noData,proto3,oneof" json:"noData,omitempty"`
 }
+type LeadersPacketData_TopRankPacket struct {
+	TopRankPacket *TopRankPacketData `protobuf:"bytes,2,opt,name=topRankPacket,proto3,oneof" json:"topRankPacket,omitempty"`
+}
 
-func (*LeadersPacketData_NoData) isLeadersPacketData_Packet() {}
+func (*LeadersPacketData_NoData) isLeadersPacketData_Packet()        {}
+func (*LeadersPacketData_TopRankPacket) isLeadersPacketData_Packet() {}
 
 func (m *LeadersPacketData) GetPacket() isLeadersPacketData_Packet {
 	if m != nil {
@@ -87,10 +92,18 @@ func (m *LeadersPacketData) GetNoData() *NoData {
 	return nil
 }
 
+func (m *LeadersPacketData) GetTopRankPacket() *TopRankPacketData {
+	if x, ok := m.GetPacket().(*LeadersPacketData_TopRankPacket); ok {
+		return x.TopRankPacket
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*LeadersPacketData) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*LeadersPacketData_NoData)(nil),
+		(*LeadersPacketData_TopRankPacket)(nil),
 	}
 }
 
@@ -130,26 +143,150 @@ func (m *NoData) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_NoData proto.InternalMessageInfo
 
+// TopRankPacketData defines a struct for the packet payload
+type TopRankPacketData struct {
+	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	Score   uint64 `protobuf:"varint,2,opt,name=score,proto3" json:"score,omitempty"`
+}
+
+func (m *TopRankPacketData) Reset()         { *m = TopRankPacketData{} }
+func (m *TopRankPacketData) String() string { return proto.CompactTextString(m) }
+func (*TopRankPacketData) ProtoMessage()    {}
+func (*TopRankPacketData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b60b9b886795dc95, []int{2}
+}
+func (m *TopRankPacketData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TopRankPacketData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_TopRankPacketData.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *TopRankPacketData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TopRankPacketData.Merge(m, src)
+}
+func (m *TopRankPacketData) XXX_Size() int {
+	return m.Size()
+}
+func (m *TopRankPacketData) XXX_DiscardUnknown() {
+	xxx_messageInfo_TopRankPacketData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TopRankPacketData proto.InternalMessageInfo
+
+func (m *TopRankPacketData) GetAddress() string {
+	if m != nil {
+		return m.Address
+	}
+	return ""
+}
+
+func (m *TopRankPacketData) GetScore() uint64 {
+	if m != nil {
+		return m.Score
+	}
+	return 0
+}
+
+// TopRankPacketAck defines a struct for the packet acknowledgment
+type TopRankPacketAck struct {
+	ClientId       string `protobuf:"bytes,1,opt,name=clientId,proto3" json:"clientId,omitempty"`
+	Address        string `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
+	HasBeenTopRank bool   `protobuf:"varint,3,opt,name=hasBeenTopRank,proto3" json:"hasBeenTopRank,omitempty"`
+}
+
+func (m *TopRankPacketAck) Reset()         { *m = TopRankPacketAck{} }
+func (m *TopRankPacketAck) String() string { return proto.CompactTextString(m) }
+func (*TopRankPacketAck) ProtoMessage()    {}
+func (*TopRankPacketAck) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b60b9b886795dc95, []int{3}
+}
+func (m *TopRankPacketAck) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TopRankPacketAck) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_TopRankPacketAck.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *TopRankPacketAck) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TopRankPacketAck.Merge(m, src)
+}
+func (m *TopRankPacketAck) XXX_Size() int {
+	return m.Size()
+}
+func (m *TopRankPacketAck) XXX_DiscardUnknown() {
+	xxx_messageInfo_TopRankPacketAck.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TopRankPacketAck proto.InternalMessageInfo
+
+func (m *TopRankPacketAck) GetClientId() string {
+	if m != nil {
+		return m.ClientId
+	}
+	return ""
+}
+
+func (m *TopRankPacketAck) GetAddress() string {
+	if m != nil {
+		return m.Address
+	}
+	return ""
+}
+
+func (m *TopRankPacketAck) GetHasBeenTopRank() bool {
+	if m != nil {
+		return m.HasBeenTopRank
+	}
+	return false
+}
+
 func init() {
 	proto.RegisterType((*LeadersPacketData)(nil), "tmsdkeys.leaders.leaders.LeadersPacketData")
 	proto.RegisterType((*NoData)(nil), "tmsdkeys.leaders.leaders.NoData")
+	proto.RegisterType((*TopRankPacketData)(nil), "tmsdkeys.leaders.leaders.TopRankPacketData")
+	proto.RegisterType((*TopRankPacketAck)(nil), "tmsdkeys.leaders.leaders.TopRankPacketAck")
 }
 
 func init() { proto.RegisterFile("leaders/packet.proto", fileDescriptor_b60b9b886795dc95) }
 
 var fileDescriptor_b60b9b886795dc95 = []byte{
-	// 173 bytes of a gzipped FileDescriptorProto
+	// 293 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0xc9, 0x49, 0x4d, 0x4c,
 	0x49, 0x2d, 0x2a, 0xd6, 0x2f, 0x48, 0x4c, 0xce, 0x4e, 0x2d, 0xd1, 0x2b, 0x28, 0xca, 0x2f, 0xc9,
 	0x17, 0x92, 0x28, 0xc9, 0x2d, 0x4e, 0xc9, 0x4e, 0xad, 0x2c, 0xd6, 0x83, 0x4a, 0xc3, 0x68, 0xa5,
-	0x48, 0x2e, 0x41, 0x1f, 0x08, 0x33, 0x00, 0xac, 0xc1, 0x25, 0xb1, 0x24, 0x51, 0xc8, 0x8a, 0x8b,
-	0x2d, 0x2f, 0x1f, 0xc4, 0x92, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x36, 0x52, 0xd0, 0xc3, 0xa5, 0x5f,
-	0xcf, 0x0f, 0xac, 0xce, 0x83, 0x21, 0x08, 0xaa, 0xc3, 0x89, 0x83, 0x8b, 0x0d, 0x62, 0xb5, 0x12,
-	0x07, 0x17, 0x1b, 0x44, 0xd6, 0xc9, 0xf5, 0xc4, 0x23, 0x39, 0xc6, 0x0b, 0x8f, 0xe4, 0x18, 0x1f,
-	0x3c, 0x92, 0x63, 0x9c, 0xf0, 0x58, 0x8e, 0xe1, 0xc2, 0x63, 0x39, 0x86, 0x1b, 0x8f, 0xe5, 0x18,
-	0xa2, 0xb4, 0xd3, 0x33, 0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73, 0xf5, 0x61, 0x76, 0xe8,
-	0xc3, 0xbc, 0x50, 0x01, 0x67, 0x95, 0x54, 0x16, 0xa4, 0x16, 0x27, 0xb1, 0x81, 0x3d, 0x63, 0x0c,
-	0x08, 0x00, 0x00, 0xff, 0xff, 0x85, 0xea, 0xbc, 0xb9, 0xe4, 0x00, 0x00, 0x00,
+	0x75, 0x8c, 0x5c, 0x82, 0x3e, 0x10, 0x76, 0x00, 0x58, 0x87, 0x4b, 0x62, 0x49, 0xa2, 0x90, 0x15,
+	0x17, 0x5b, 0x5e, 0x3e, 0x88, 0x25, 0xc1, 0xa8, 0xc0, 0xa8, 0xc1, 0x6d, 0xa4, 0xa0, 0x87, 0xcb,
+	0x00, 0x3d, 0x3f, 0xb0, 0x3a, 0x0f, 0x86, 0x20, 0xa8, 0x0e, 0xa1, 0x60, 0x2e, 0xde, 0x92, 0xfc,
+	0x82, 0xa0, 0xc4, 0xbc, 0x6c, 0x88, 0x81, 0x12, 0x4c, 0x60, 0x23, 0xb4, 0x71, 0x1b, 0x11, 0x82,
+	0xac, 0x1c, 0x6a, 0x1a, 0xaa, 0x19, 0x4e, 0x1c, 0x5c, 0x6c, 0x10, 0x0f, 0x29, 0x71, 0x70, 0xb1,
+	0x41, 0xac, 0x54, 0x72, 0xe6, 0x12, 0xc4, 0xd0, 0x29, 0x24, 0xc1, 0xc5, 0x9e, 0x98, 0x92, 0x52,
+	0x94, 0x5a, 0x5c, 0x0c, 0x76, 0x3a, 0x67, 0x10, 0x8c, 0x2b, 0x24, 0xc2, 0xc5, 0x5a, 0x9c, 0x9c,
+	0x5f, 0x94, 0x0a, 0x76, 0x0f, 0x4b, 0x10, 0x84, 0xa3, 0x54, 0xc0, 0x25, 0x80, 0x62, 0x88, 0x63,
+	0x72, 0xb6, 0x90, 0x14, 0x17, 0x47, 0x72, 0x4e, 0x66, 0x6a, 0x5e, 0x89, 0x67, 0x0a, 0xd4, 0x10,
+	0x38, 0x1f, 0xd9, 0x7c, 0x26, 0x54, 0xf3, 0xd5, 0xb8, 0xf8, 0x32, 0x12, 0x8b, 0x9d, 0x52, 0x53,
+	0xf3, 0xa0, 0x06, 0x4a, 0x30, 0x2b, 0x30, 0x6a, 0x70, 0x04, 0xa1, 0x89, 0x3a, 0xb9, 0x9e, 0x78,
+	0x24, 0xc7, 0x78, 0xe1, 0x91, 0x1c, 0xe3, 0x83, 0x47, 0x72, 0x8c, 0x13, 0x1e, 0xcb, 0x31, 0x5c,
+	0x78, 0x2c, 0xc7, 0x70, 0xe3, 0xb1, 0x1c, 0x43, 0x94, 0x76, 0x7a, 0x66, 0x49, 0x46, 0x69, 0x92,
+	0x5e, 0x72, 0x7e, 0xae, 0x3e, 0x2c, 0xb0, 0xf4, 0x61, 0xf1, 0x59, 0x01, 0x67, 0x95, 0x54, 0x16,
+	0xa4, 0x16, 0x27, 0xb1, 0x81, 0x63, 0xd6, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0x02, 0xba, 0x23,
+	0xe5, 0xf1, 0x01, 0x00, 0x00,
 }
 
 func (m *LeadersPacketData) Marshal() (dAtA []byte, err error) {
@@ -205,6 +342,27 @@ func (m *LeadersPacketData_NoData) MarshalToSizedBuffer(dAtA []byte) (int, error
 	}
 	return len(dAtA) - i, nil
 }
+func (m *LeadersPacketData_TopRankPacket) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LeadersPacketData_TopRankPacket) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TopRankPacket != nil {
+		{
+			size, err := m.TopRankPacket.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPacket(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
 func (m *NoData) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -225,6 +383,88 @@ func (m *NoData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *TopRankPacketData) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TopRankPacketData) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TopRankPacketData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Score != 0 {
+		i = encodeVarintPacket(dAtA, i, uint64(m.Score))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintPacket(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *TopRankPacketAck) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TopRankPacketAck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TopRankPacketAck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.HasBeenTopRank {
+		i--
+		if m.HasBeenTopRank {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintPacket(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.ClientId) > 0 {
+		i -= len(m.ClientId)
+		copy(dAtA[i:], m.ClientId)
+		i = encodeVarintPacket(dAtA, i, uint64(len(m.ClientId)))
+		i--
+		dAtA[i] = 0xa
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -263,12 +503,60 @@ func (m *LeadersPacketData_NoData) Size() (n int) {
 	}
 	return n
 }
+func (m *LeadersPacketData_TopRankPacket) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TopRankPacket != nil {
+		l = m.TopRankPacket.Size()
+		n += 1 + l + sovPacket(uint64(l))
+	}
+	return n
+}
 func (m *NoData) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	return n
+}
+
+func (m *TopRankPacketData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + sovPacket(uint64(l))
+	}
+	if m.Score != 0 {
+		n += 1 + sovPacket(uint64(m.Score))
+	}
+	return n
+}
+
+func (m *TopRankPacketAck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ClientId)
+	if l > 0 {
+		n += 1 + l + sovPacket(uint64(l))
+	}
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + sovPacket(uint64(l))
+	}
+	if m.HasBeenTopRank {
+		n += 2
+	}
 	return n
 }
 
@@ -342,6 +630,41 @@ func (m *LeadersPacketData) Unmarshal(dAtA []byte) error {
 			}
 			m.Packet = &LeadersPacketData_NoData{v}
 			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TopRankPacket", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPacket
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TopRankPacketData{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Packet = &LeadersPacketData_TopRankPacket{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPacket(dAtA[iNdEx:])
@@ -392,6 +715,241 @@ func (m *NoData) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: NoData: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPacket(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TopRankPacketData) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPacket
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TopRankPacketData: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TopRankPacketData: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPacket
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Score", wireType)
+			}
+			m.Score = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Score |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPacket(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TopRankPacketAck) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPacket
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TopRankPacketAck: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TopRankPacketAck: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPacket
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPacket
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HasBeenTopRank", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.HasBeenTopRank = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPacket(dAtA[iNdEx:])
