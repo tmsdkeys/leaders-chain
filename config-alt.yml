@@ -1,0 +1,26 @@
+accounts:
+  - name: adam
+    coins: ["20000token", "200000000stake"]
+  - name: steve
+    coins: ["10000token", "100000000stake"]
+validator:
+  name: adam
+  staked: "100000000stake"
+client:
+  openapi:
+    path: "docs/static/openapi.yml"
+  vuex:
+    path: "vue/src/store"
+faucet:
+  name: steve
+  coins: ["5token", "100000stake"]
+  port: 4501
+host:
+  rpc: ":26559"
+  p2p: ":26558"
+  prof: ":6063"
+  grpc: ":9095"
+  grpc-web: "9096"
+  api: ":1319"
+init:
+  home: "$HOME/.leaders1"
