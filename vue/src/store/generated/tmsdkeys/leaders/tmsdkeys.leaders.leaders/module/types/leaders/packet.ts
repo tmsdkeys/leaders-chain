@@ -7,6 +7,8 @@ export const protobufPackage = "tmsdkeys.leaders.leaders";
 export interface LeadersPacketData {
   noData: NoData | undefined;
   /** this line is used by starport scaffolding # ibc/packet/proto/field */
+  gameResultPacket: GameResultPacketData | undefined;
+  /** this line is used by starport scaffolding # ibc/packet/proto/field/number */
   topRankPacket: TopRankPacketData | undefined;
 }
 
@@ -25,12 +27,30 @@ export interface TopRankPacketAck {
   hasBeenTopRank: boolean;
 }
 
+/** GameResultPacketData defines a struct for the packet payload */
+export interface GameResultPacketData {
+  gameId: number;
+  address: string;
+  winCount: number;
+}
+
+/** GameResultPacketAck defines a struct for the packet acknowledgment */
+export interface GameResultPacketAck {
+  gameId: number;
+}
+
 const baseLeadersPacketData: object = {};
 
 export const LeadersPacketData = {
   encode(message: LeadersPacketData, writer: Writer = Writer.create()): Writer {
     if (message.noData !== undefined) {
       NoData.encode(message.noData, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.gameResultPacket !== undefined) {
+      GameResultPacketData.encode(
+        message.gameResultPacket,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     if (message.topRankPacket !== undefined) {
       TopRankPacketData.encode(
@@ -50,6 +70,12 @@ export const LeadersPacketData = {
       switch (tag >>> 3) {
         case 1:
           message.noData = NoData.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.gameResultPacket = GameResultPacketData.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 2:
           message.topRankPacket = TopRankPacketData.decode(
@@ -72,6 +98,16 @@ export const LeadersPacketData = {
     } else {
       message.noData = undefined;
     }
+    if (
+      object.gameResultPacket !== undefined &&
+      object.gameResultPacket !== null
+    ) {
+      message.gameResultPacket = GameResultPacketData.fromJSON(
+        object.gameResultPacket
+      );
+    } else {
+      message.gameResultPacket = undefined;
+    }
     if (object.topRankPacket !== undefined && object.topRankPacket !== null) {
       message.topRankPacket = TopRankPacketData.fromJSON(object.topRankPacket);
     } else {
@@ -84,6 +120,10 @@ export const LeadersPacketData = {
     const obj: any = {};
     message.noData !== undefined &&
       (obj.noData = message.noData ? NoData.toJSON(message.noData) : undefined);
+    message.gameResultPacket !== undefined &&
+      (obj.gameResultPacket = message.gameResultPacket
+        ? GameResultPacketData.toJSON(message.gameResultPacket)
+        : undefined);
     message.topRankPacket !== undefined &&
       (obj.topRankPacket = message.topRankPacket
         ? TopRankPacketData.toJSON(message.topRankPacket)
@@ -97,6 +137,16 @@ export const LeadersPacketData = {
       message.noData = NoData.fromPartial(object.noData);
     } else {
       message.noData = undefined;
+    }
+    if (
+      object.gameResultPacket !== undefined &&
+      object.gameResultPacket !== null
+    ) {
+      message.gameResultPacket = GameResultPacketData.fromPartial(
+        object.gameResultPacket
+      );
+    } else {
+      message.gameResultPacket = undefined;
     }
     if (object.topRankPacket !== undefined && object.topRankPacket !== null) {
       message.topRankPacket = TopRankPacketData.fromPartial(
@@ -308,6 +358,160 @@ export const TopRankPacketAck = {
       message.hasBeenTopRank = object.hasBeenTopRank;
     } else {
       message.hasBeenTopRank = false;
+    }
+    return message;
+  },
+};
+
+const baseGameResultPacketData: object = {
+  gameId: 0,
+  address: "",
+  winCount: 0,
+};
+
+export const GameResultPacketData = {
+  encode(
+    message: GameResultPacketData,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.gameId !== 0) {
+      writer.uint32(8).uint64(message.gameId);
+    }
+    if (message.address !== "") {
+      writer.uint32(18).string(message.address);
+    }
+    if (message.winCount !== 0) {
+      writer.uint32(24).uint64(message.winCount);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): GameResultPacketData {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseGameResultPacketData } as GameResultPacketData;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.gameId = longToNumber(reader.uint64() as Long);
+          break;
+        case 2:
+          message.address = reader.string();
+          break;
+        case 3:
+          message.winCount = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GameResultPacketData {
+    const message = { ...baseGameResultPacketData } as GameResultPacketData;
+    if (object.gameId !== undefined && object.gameId !== null) {
+      message.gameId = Number(object.gameId);
+    } else {
+      message.gameId = 0;
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = String(object.address);
+    } else {
+      message.address = "";
+    }
+    if (object.winCount !== undefined && object.winCount !== null) {
+      message.winCount = Number(object.winCount);
+    } else {
+      message.winCount = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: GameResultPacketData): unknown {
+    const obj: any = {};
+    message.gameId !== undefined && (obj.gameId = message.gameId);
+    message.address !== undefined && (obj.address = message.address);
+    message.winCount !== undefined && (obj.winCount = message.winCount);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<GameResultPacketData>): GameResultPacketData {
+    const message = { ...baseGameResultPacketData } as GameResultPacketData;
+    if (object.gameId !== undefined && object.gameId !== null) {
+      message.gameId = object.gameId;
+    } else {
+      message.gameId = 0;
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    } else {
+      message.address = "";
+    }
+    if (object.winCount !== undefined && object.winCount !== null) {
+      message.winCount = object.winCount;
+    } else {
+      message.winCount = 0;
+    }
+    return message;
+  },
+};
+
+const baseGameResultPacketAck: object = { gameId: 0 };
+
+export const GameResultPacketAck = {
+  encode(
+    message: GameResultPacketAck,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.gameId !== 0) {
+      writer.uint32(8).uint64(message.gameId);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): GameResultPacketAck {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseGameResultPacketAck } as GameResultPacketAck;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.gameId = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GameResultPacketAck {
+    const message = { ...baseGameResultPacketAck } as GameResultPacketAck;
+    if (object.gameId !== undefined && object.gameId !== null) {
+      message.gameId = Number(object.gameId);
+    } else {
+      message.gameId = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: GameResultPacketAck): unknown {
+    const obj: any = {};
+    message.gameId !== undefined && (obj.gameId = message.gameId);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<GameResultPacketAck>): GameResultPacketAck {
+    const message = { ...baseGameResultPacketAck } as GameResultPacketAck;
+    if (object.gameId !== undefined && object.gameId !== null) {
+      message.gameId = object.gameId;
+    } else {
+      message.gameId = 0;
     }
     return message;
   },

@@ -9,6 +9,7 @@ message LeadersPacketData {
     oneof packet {
         NoData noData = 1;
         // this line is used by starport scaffolding # ibc/packet/proto/field
+				GameResultPacketData gameResultPacket = 3; // this line is used by starport scaffolding # ibc/packet/proto/field/number
 				TopRankPacketData topRankPacket = 2; // this line is used by starport scaffolding # ibc/packet/proto/field/number
     }
 }
@@ -24,8 +25,19 @@ message TopRankPacketData {
 
 // TopRankPacketAck defines a struct for the packet acknowledgment
 message TopRankPacketAck {
-	  string clientId = 1;
+	string clientId = 1;
   string address = 2;
   bool hasBeenTopRank = 3;
+}
+// GameResultPacketData defines a struct for the packet payload
+message GameResultPacketData {
+  uint64 gameId = 1;
+  string address = 2;
+  uint64 winCount = 3;
+}
+
+// GameResultPacketAck defines a struct for the packet acknowledgment
+message GameResultPacketAck {
+	  uint64 gameId = 1;
 }
 // this line is used by starport scaffolding # ibc/packet/proto/message
