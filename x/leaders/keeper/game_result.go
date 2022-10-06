@@ -11,6 +11,7 @@ import (
 // OnRecvGameResultPacket processes packet reception
 func (k Keeper) OnRecvGameResultPacket(ctx sdk.Context, packet channeltypes.Packet, data types.GameResultPacketData) (packetAck types.GameResultPacketAck, err error) {
 	// validate packet data upon receiving
+	packetAck = types.GameResultPacketAck{GameId: data.GameId}
 	if err := data.ValidateBasic(); err != nil {
 		return packetAck, err
 	}
@@ -22,7 +23,7 @@ func (k Keeper) OnRecvGameResultPacket(ctx sdk.Context, packet channeltypes.Pack
 	}
 	topScore, err := strconv.ParseUint(topRank.Score, 10, 64)
 	if err != nil {
-		return types.GameResultPacketAck{GameId: data.GameId}, err
+		return packetAck, err
 	}
 
 	if data.WinCount > topScore {
