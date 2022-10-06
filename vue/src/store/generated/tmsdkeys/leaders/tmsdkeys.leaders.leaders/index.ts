@@ -4,11 +4,13 @@ import { LeadersPacketData } from "./module/types/leaders/packet"
 import { NoData } from "./module/types/leaders/packet"
 import { TopRankPacketData } from "./module/types/leaders/packet"
 import { TopRankPacketAck } from "./module/types/leaders/packet"
+import { GameResultPacketData } from "./module/types/leaders/packet"
+import { GameResultPacketAck } from "./module/types/leaders/packet"
 import { Params } from "./module/types/leaders/params"
 import { TopRanked } from "./module/types/leaders/top_ranked"
 
 
-export { LeadersPacketData, NoData, TopRankPacketData, TopRankPacketAck, Params, TopRanked };
+export { LeadersPacketData, NoData, TopRankPacketData, TopRankPacketAck, GameResultPacketData, GameResultPacketAck, Params, TopRanked };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -54,6 +56,8 @@ const getDefaultState = () => {
 						NoData: getStructure(NoData.fromPartial({})),
 						TopRankPacketData: getStructure(TopRankPacketData.fromPartial({})),
 						TopRankPacketAck: getStructure(TopRankPacketAck.fromPartial({})),
+						GameResultPacketData: getStructure(GameResultPacketData.fromPartial({})),
+						GameResultPacketAck: getStructure(GameResultPacketAck.fromPartial({})),
 						Params: getStructure(Params.fromPartial({})),
 						TopRanked: getStructure(TopRanked.fromPartial({})),
 						
