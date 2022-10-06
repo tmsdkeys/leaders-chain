@@ -20,7 +20,7 @@ host:
   p2p: ":26558"
   prof: ":6063"
   grpc: ":9095"
-  grpc-web: "9096"
+  grpc-web: ":9096"
   api: ":1319"
 init:
   home: "$HOME/.leaders1"
